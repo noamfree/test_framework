@@ -13,6 +13,13 @@ class TestResult:
     def succeed(self):
         self.status = "PASSED"
 
+    def fail(self, error):
+        self.error = error
+
+    def show_problem(self):
+        return type(self.error).__name__ + ": " + str(self.error)
+
+
 
 class TestCase:
     def __init__(self, what_to_run):
@@ -25,8 +32,8 @@ class TestCase:
         try:
             exec("self." + self.what_to_run + "()")
             test_result.succeed()
-        except:
-            pass
+        except Exception as e:
+            test_result.fail(e)
         self.tear_down()
 
         return test_result

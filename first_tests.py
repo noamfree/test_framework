@@ -49,7 +49,12 @@ class TestingTestCase(TestCase):
         assert str(test_result) == "[ test: broken_method ------- ]\n" \
                                    "[ ------------------- FAILURE ]"
 
+    def test_report_what_is_the_problem(self):
+        test = BrokenTest("broken_method")
+        test_result = test.run()
+        assert test_result.show_problem() == "Exception: FOO!!!!"
 
 print(TestingTestCase("test_setup_run_teardown_order").run())
 print(TestingTestCase("test_report_succeeding_test").run())
 print(TestingTestCase("test_reporting_failure").run())
+print(TestingTestCase("test_report_what_is_the_problem").run())
