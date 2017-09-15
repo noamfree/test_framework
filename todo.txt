@@ -1,5 +1,3 @@
-
-teardown
 report what area we running
 report success
 report failure
