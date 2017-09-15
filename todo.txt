@@ -1,6 +1,4 @@
-
 automaticcly confirm running a method
-choose what method to run by it's name as a string
 setup
 teardown
 report what area we running
