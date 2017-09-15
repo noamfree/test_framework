@@ -1,6 +1,6 @@
 report what test we running
 enableprinting test results
-report failure
+
 report what was the error
 catch errors in setup
 what to do in teardown when setup was'n finished? users responsibility?

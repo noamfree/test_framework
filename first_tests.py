@@ -23,6 +23,11 @@ class WasRun(TestCase):
         self.log += "teardown "
 
 
+class BrokenTest(TestCase):
+    def broken_method(self):
+        raise Exception("FOO!!!!")
+
+
 class TestingTestCase(TestCase):
     def test_setup_run_teardown_order(self):
         test = WasRun("testing_method")
@@ -37,5 +42,14 @@ class TestingTestCase(TestCase):
         assert str(test_result) == "[ test: testing_method ------ ]\n" \
                                    "[ -------------------- PASSED ]"
 
+    def test_reporting_failure(self):
+        test = BrokenTest("broken_method")
+        test_result = test.run()
+        assert test_result.status == "FAILURE"
+        assert str(test_result) == "[ test: broken_method ------- ]\n" \
+                                   "[ ------------------- FAILURE ]"
+
+
 print(TestingTestCase("test_setup_run_teardown_order").run())
 print(TestingTestCase("test_report_succeeding_test").run())
+print(TestingTestCase("test_reporting_failure").run())

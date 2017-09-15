@@ -1,15 +1,17 @@
 class TestResult:
     def __init__(self, what_was_run):
-        self.status = "PASSED"
+        self.status = "FAILURE"
         self.what_was_run = what_was_run
 
     def __repr__(self):
-
         first_line_completion = "-" * len(self.status)
         message_start = "test: "
         second_line_completion = "-" * (len(self.what_was_run) + len(message_start))
         return "[ " + message_start + self.what_was_run + " " + first_line_completion + " ]\n" \
-             + "[ " + second_line_completion +            " " + self.status +                " ]"
+               + "[ " + second_line_completion + " " + self.status + " ]"
+
+    def succeed(self):
+        self.status = "PASSED"
 
 
 class TestCase:
@@ -17,10 +19,17 @@ class TestCase:
         self.what_to_run = what_to_run
 
     def run(self) -> TestResult:
+        test_result = TestResult(self.what_to_run)
+
         self.setup()
-        exec("self." + self.what_to_run + "()")
+        try:
+            exec("self." + self.what_to_run + "()")
+            test_result.succeed()
+        except:
+            pass
         self.tear_down()
-        return TestResult(self.what_to_run)
+
+        return test_result
 
     def setup(self):
         pass
