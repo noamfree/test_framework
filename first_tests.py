@@ -33,7 +33,7 @@ class TestingTestCase(TestCase):
     def test_report_succeeding_test(self):
         test = WasRun("testing_method")
         test_result = test.run()
-        assert test_result.succes_status == "success"
+        assert test_result.success_status == "success"
 
 
 TestingTestCase("test_setup_run_teardown_order").run()

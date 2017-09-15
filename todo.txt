@@ -1,5 +1,5 @@
-report what area we running
-report success
+report what test we running
+enableprinting test results
 report failure
 report what was the error
 catch errors in setup
