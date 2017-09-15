@@ -12,7 +12,7 @@ class WasRun(TestCase):
         TestCase.__init__(self, what_to_run)
 
     def testing_method(self):
-        self.log += "running: testing_method "
+        self.log += "running: %s " % self.what_to_run
         self.was_run = True
 
     def setup(self):
@@ -30,5 +30,11 @@ class TestingTestCase(TestCase):
         test.run()
         assert test.log == "setup running: testing_method teardown "
 
+    def test_report_succeeding_test(self):
+        test = WasRun("testing_method")
+        test_result = test.run()
+        assert test_result.succes_status == "success"
+
 
 TestingTestCase("test_setup_run_teardown_order").run()
+TestingTestCase("test_report_succeeding_test").run()
