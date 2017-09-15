@@ -1,4 +1,3 @@
-automaticcly confirm running a method
 setup
 teardown
 report what area we running

@@ -13,10 +13,11 @@ class WasRun(TestCase):
         self.was_run = True
 
 
-def test_was_run():
-    test = WasRun("testing_method")
-    print(test.was_run)  # should be None
-    test.run()
-    print(test.was_run)  # should be True
+class TestingTestCase(TestCase):
+    def test_was_run(self):
+        test = WasRun("testing_method")
+        assert test.was_run is None
+        test.run()
+        assert test.was_run is True
 
-test_was_run()
+TestingTestCase("test_was_run").run()
