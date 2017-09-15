@@ -1,0 +1,12 @@
+
+automaticcly confirm running a method
+choose what method to run by it's name as a string
+setup
+teardown
+report what area we running
+report success
+report failure
+report what was the error
+catch errors in setup
+what to do in teardown when setup was'n finished? users responsibility?
+create tests suite
