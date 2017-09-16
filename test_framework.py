@@ -1,30 +1,6 @@
+from test_status import Failure, Success
+
 TEXT_COLOR = '\033[0m'
-SUCCESS_COLOR = '\033[92m'
-FAIL_COLOR = '\033[91m'
-
-
-class Status:
-    def __repr__(self):
-        pass
-
-    def color(self):
-        pass
-
-
-class Failure(Status):
-    def __repr__(self):
-        return "FAILURE"
-
-    def color(self):
-        return '\033[91m'
-
-
-class Success(Status):
-    def __repr__(self):
-        return "PASSED"
-
-    def color(self):
-        return '\033[92m'
 
 
 class TestResult:
@@ -48,7 +24,6 @@ class TestResult:
         return "[ " + message_start + self.what_was_run + " " + first_line_completion + " ]\n" \
              + "[ " + second_line_completion + " " + str(self.__status) + " ]"
 
-
     def status(self):
         return str(self.__status)
 
@@ -60,9 +35,6 @@ class TestResult:
 
     def show_problem(self):
         return type(self.error).__name__ + ": " + str(self.error)
-
-    # def status_color(self):
-    #     return FAIL_COLOR if self.error else SUCCESS_COLOR
 
 
 class TestCase:
@@ -87,3 +59,11 @@ class TestCase:
 
     def tear_down(self):
         pass
+
+
+class TestSuite(object):
+    def __init__(self, *tests):
+        self.tests = tests
+
+    def __len__(self):
+        return len(self.tests)
