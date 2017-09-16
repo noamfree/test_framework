@@ -38,23 +38,46 @@ class TestingTestCase(TestCase):
     def test_report_succeeding_test(self):
         test = WasRun("testing_method")
         test_result = test.run()
-        assert test_result.status == "PASSED"
-        assert str(test_result) == "[ test: testing_method ------ ]\n" \
+        assert test_result.status() == "PASSED"
+        assert test_result.__repr__(color=False) == "[ test: testing_method ------ ]\n" \
                                    "[ -------------------- PASSED ]"
+
+    def test_report_success_with_color(self):
+        test = WasRun("testing_method")
+        test_result = test.run()
+        assert test_result.status() == "PASSED"
+        assert str(test_result) == "\033[92m" \
+                                   "[ test: testing_method ------ ]\n" \
+                                   "[ -------------------- PASSED ]\033[0m"
 
     def test_reporting_failure(self):
         test = BrokenTest("broken_method")
         test_result = test.run()
-        assert test_result.status == "FAILURE"
-        assert str(test_result) == "[ test: broken_method ------- ]\n" \
-                                   "[ ------------------- FAILURE ]"
+        assert test_result.status() == "FAILURE"
 
     def test_report_what_is_the_problem(self):
         test = BrokenTest("broken_method")
         test_result = test.run()
         assert test_result.show_problem() == "Exception: FOO!!!!"
+        assert test_result.__repr__(color=False) == "[ test: broken_method ------- ]\n" \
+                                   "[ ------------------- FAILURE ]\n" \
+                                   "Exception: FOO!!!!"
+
+    def test_report_fail_with_color(self):
+        test = BrokenTest("broken_method")
+        test_result = test.run()
+        assert test_result.show_problem() == "Exception: FOO!!!!"
+        assert str(test_result) == "\033[91m" \
+                                   "[ test: broken_method ------- ]\n" \
+                                   "[ ------------------- FAILURE ]\033[0m\n" \
+                                   "Exception: FOO!!!!"
+
+
 
 print(TestingTestCase("test_setup_run_teardown_order").run())
 print(TestingTestCase("test_report_succeeding_test").run())
 print(TestingTestCase("test_reporting_failure").run())
 print(TestingTestCase("test_report_what_is_the_problem").run())
+print(TestingTestCase("test_report_success_with_color").run())
+print(TestingTestCase("test_report_fail_with_color").run())
+

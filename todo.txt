@@ -2,4 +2,5 @@ catch errors in setup
 what to do in teardown when setup was'n finished? users responsibility?
 create tests suite
 automaticly find all tests in class
-refactor error. it should not be initialized only after crash
+refactor error. it should not be initialized only after crash?
+testResult.Status should not return a string.
