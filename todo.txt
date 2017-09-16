@@ -1,6 +1,8 @@
 catch errors in setup
 what to do in teardown when setup was'n finished? users responsibility?
-create tests suite
+suite should have a name. like a test!
+suite should report\crete results for all the tests it has
+everything is in a main suite
 automaticly find all tests in class
 refactor error. it should not be initialized only after crash?
 testResult.Status should not return a string.

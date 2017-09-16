@@ -37,6 +37,17 @@ class TestResult:
         return type(self.error).__name__ + ": " + str(self.error)
 
 
+class TestsResult(TestResult):
+    def __init__(self, *results):
+        self.results = results
+
+    def tests_ran(self):
+        return len(self.results)
+
+    def tests_failed(self):
+        return len(list(filter(lambda x: x.status() == "FAILURE", self.results)))
+
+
 class TestCase:
     def __init__(self, what_to_run):
         self.what_to_run = what_to_run
@@ -67,3 +78,7 @@ class TestSuite(object):
 
     def __len__(self):
         return len(self.tests)
+
+    def run(self):
+        results = [test.run() for test in self.tests]
+        return TestsResult(*results)

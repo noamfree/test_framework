@@ -75,6 +75,17 @@ class TestingTestCase(TestCase):
         assert len(suite) == 2
 
 
+    def test_running_suite(self):
+        suite = TestSuite(self.working_test, self.broken_test, self.broken_test)
+        suite_result = suite.run()
+        assert suite_result.tests_ran() == 3
+        assert suite_result.tests_failed() == 2
+
+    # def test_reporting_succesful_suite(self):
+    #     suite = TestSuite(self.working_test, self.working_test)
+    #     suite_result = suite.run()
+    #
+
 
 
 print(TestingTestCase("test_setup_run_teardown_order").run())
@@ -84,4 +95,5 @@ print(TestingTestCase("test_report_what_is_the_problem").run())
 print(TestingTestCase("test_report_success_with_color").run())
 print(TestingTestCase("test_report_fail_with_color").run())
 print(TestingTestCase("test_suite").run())
+print(TestingTestCase("test_running_suite").run())
 
