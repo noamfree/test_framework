@@ -5,7 +5,7 @@ TEXT_COLOR = '\033[0m'
 
 class TestResult:
     def __init__(self, what_was_run):
-        self.__status = Failure()
+        self._status = Failure()
         self.what_was_run = what_was_run
         self.error = None
 
@@ -14,21 +14,21 @@ class TestResult:
         error_message = ("\n" + self.show_problem()) if self.error else ""
 
         if color:
-            status_message = self.__status.color() + status_message + TEXT_COLOR
+            status_message = self._status.color() + status_message + TEXT_COLOR
         return status_message + error_message
 
     def status_message(self):
-        first_line_completion = "-" * len(str(self.__status))
+        first_line_completion = "-" * len(str(self._status))
         message_start = "test: "
         second_line_completion = "-" * (len(self.what_was_run) + len(message_start))
         return "[ " + message_start + self.what_was_run + " " + first_line_completion + " ]\n" \
-             + "[ " + second_line_completion + " " + str(self.__status) + " ]"
+             + "[ " + second_line_completion + " " + self.status() + " ]"
 
     def status(self):
-        return str(self.__status)
+        return str(self._status)
 
     def succeed(self):
-        self.__status = Success()
+        self._status = Success()
 
     def fail(self, error):
         self.error = error
@@ -38,8 +38,10 @@ class TestResult:
 
 
 class TestsResult(TestResult):
-    def __init__(self, *results):
-        self.results = results
+    def __init__(self, what_was_run,  *results):
+        TestResult.__init__(self, what_was_run)
+        self.results = []
+        self._status = Success()
 
     def tests_ran(self):
         return len(self.results)
@@ -47,23 +49,39 @@ class TestsResult(TestResult):
     def tests_failed(self):
         return len(list(filter(lambda x: x.status() == "FAILURE", self.results)))
 
+    def add_results(self, *results):
+        for result in results:
+            self.results.append(result)
+        self.update_status()
+
+    def update_status(self):
+        if self.tests_failed():
+            self._status = Failure()
+
 
 class TestCase:
     def __init__(self, what_to_run):
         self.what_to_run = what_to_run
+        self.init_results()
 
     def run(self) -> TestResult:
-        test_result = TestResult(self.what_to_run)
-
         self.setup()
+
         try:
-            exec("self." + self.what_to_run + "()")
-            test_result.succeed()
+            self.running_command()
         except Exception as e:
-            test_result.fail(e)
+            self.test_result.fail(e)
+
         self.tear_down()
 
-        return test_result
+        return self.test_result
+
+    def init_results(self):
+        self.test_result = TestResult(self.what_to_run)
+
+    def running_command(self):
+        exec("self." + self.what_to_run + "()")
+        self.test_result.succeed()
 
     def setup(self):
         pass
@@ -72,13 +90,18 @@ class TestCase:
         pass
 
 
-class TestSuite(object):
-    def __init__(self, *tests):
+class TestSuite(TestCase):
+    def __init__(self, name,  *tests):
+        self.name = name
+        super().__init__(name)
         self.tests = tests
 
     def __len__(self):
         return len(self.tests)
 
-    def run(self):
-        results = [test.run() for test in self.tests]
-        return TestsResult(*results)
+    def init_results(self):
+        self.test_result = TestsResult(self.name)
+
+    def running_command(self):
+         self.test_result.add_results(*[test.run() for test in self.tests])
+

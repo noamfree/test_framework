@@ -1,8 +1,10 @@
 catch errors in setup
 what to do in teardown when setup was'n finished? users responsibility?
-suite should have a name. like a test!
-suite should report\crete results for all the tests it has
+add an option to __repr__ the suite verbosely
+when suite failes, it should report all tests with information.
 everything is in a main suite
 automaticly find all tests in class
 refactor error. it should not be initialized only after crash?
 testResult.Status should not return a string.
+give a more globla flag to control coloring.
+show nested exception? how?

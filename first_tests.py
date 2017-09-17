@@ -42,7 +42,7 @@ class TestingTestCase(TestCase):
         test_result = self.working_test.run()
         assert test_result.status() == "PASSED"
         assert test_result.__repr__(color=False) == "[ test: testing_method ------ ]\n" \
-                                   "[ -------------------- PASSED ]"
+                                                    "[ -------------------- PASSED ]"
 
     def test_report_success_with_color(self):
         test_result = self.working_test.run()
@@ -59,8 +59,8 @@ class TestingTestCase(TestCase):
         test_result = self.broken_test.run()
         assert test_result.show_problem() == "Exception: FOO!!!!"
         assert test_result.__repr__(color=False) == "[ test: broken_method ------- ]\n" \
-                                   "[ ------------------- FAILURE ]\n" \
-                                   "Exception: FOO!!!!"
+                                                    "[ ------------------- FAILURE ]\n" \
+                                                    "Exception: FOO!!!!"
 
     def test_report_fail_with_color(self):
         test_result = self.broken_test.run()
@@ -71,29 +71,43 @@ class TestingTestCase(TestCase):
                                    "Exception: FOO!!!!"
 
     def test_suite(self):
-        suite = TestSuite(self.working_test, self.broken_test)
+        suite = TestSuite("suite", self.working_test, self.broken_test)
         assert len(suite) == 2
 
-
     def test_running_suite(self):
-        suite = TestSuite(self.working_test, self.broken_test, self.broken_test)
+        suite = TestSuite("suite", self.working_test, self.broken_test, self.broken_test)
         suite_result = suite.run()
         assert suite_result.tests_ran() == 3
         assert suite_result.tests_failed() == 2
 
-    # def test_reporting_succesful_suite(self):
-    #     suite = TestSuite(self.working_test, self.working_test)
-    #     suite_result = suite.run()
-    #
+    def test_reporting_succesful_suite(self):
+        suite = TestSuite("suite", self.working_test, self.working_test)
+        suite_result = suite.run()
+        assert suite_result.__repr__(color=False) == "[ test: suite ------ ]\n" \
+                                                     "[ ----------- PASSED ]"
 
+    def test_reporting_failed_suite(self):
+        suite = TestSuite("suite", self.working_test, self.broken_test)
+        suite_result = suite.run()
+        assert suite_result.__repr__(color=False) == "[ test: suite ------- ]\n" \
+                                                     "[ ----------- FAILURE ]"
 
 
 print(TestingTestCase("test_setup_run_teardown_order").run())
-print(TestingTestCase("test_report_succeeding_test").run())
-print(TestingTestCase("test_reporting_failure").run())
-print(TestingTestCase("test_report_what_is_the_problem").run())
-print(TestingTestCase("test_report_success_with_color").run())
-print(TestingTestCase("test_report_fail_with_color").run())
-print(TestingTestCase("test_suite").run())
-print(TestingTestCase("test_running_suite").run())
 
+basic_test_suite = TestSuite("test_testing",
+                             TestingTestCase("test_report_succeeding_test"),
+                             TestingTestCase("test_reporting_failure"),
+                             TestingTestCase("test_report_what_is_the_problem"),
+                             TestingTestCase("test_report_success_with_color"),
+                             TestingTestCase("test_report_fail_with_color"),
+                             )
+
+suite_test_suite = TestSuite("suite_testing",
+                             TestingTestCase("test_suite"),
+                             TestingTestCase("test_running_suite"),
+                             TestingTestCase("test_reporting_succesful_suite"),
+                             TestingTestCase("test_reporting_failed_suite"),
+                             )
+print(basic_test_suite.run())
+print(suite_test_suite.run())
