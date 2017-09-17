@@ -58,6 +58,19 @@ class TestsResult(TestResult):
         if self.tests_failed():
             self._status = Failure()
 
+    def __repr__(self, color=True):
+        suite_repr = TestResult.__repr__(self, color)
+        tests_repr = ("\n" + self.tests_repr(color)) if self.tests_failed() else ""
+        return suite_repr + tests_repr
+
+    def tests_repr(self, color):
+        tests_reprs = []
+        for i, result in enumerate(self.results):
+            tests_reprs.append("test " + str(i+1) + ":")
+            tests_reprs.append(result.__repr__(color))
+        tests_reprs = "\n".join(tests_reprs)
+        return tests_reprs
+
 
 class TestCase:
     def __init__(self, what_to_run):
@@ -104,4 +117,6 @@ class TestSuite(TestCase):
 
     def running_command(self):
          self.test_result.add_results(*[test.run() for test in self.tests])
+         # self.test_result.add_results(*[test.run().set_name(self.name + "::" + get_name()) for test in self.tests])
+
 

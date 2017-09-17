@@ -90,7 +90,15 @@ class TestingTestCase(TestCase):
         suite = TestSuite("suite", self.working_test, self.broken_test)
         suite_result = suite.run()
         assert suite_result.__repr__(color=False) == "[ test: suite ------- ]\n" \
-                                                     "[ ----------- FAILURE ]"
+                                                     "[ ----------- FAILURE ]\n" \
+                                                     "test 1:\n" \
+                                                     "[ test: testing_method ------ ]\n" \
+                                                     "[ -------------------- PASSED ]\n" \
+                                                     "test 2:\n" \
+                                                     "[ test: broken_method ------- ]\n" \
+                                                     "[ ------------------- FAILURE ]\n" \
+                                                     "Exception: FOO!!!!"
+
 
 
 print(TestingTestCase("test_setup_run_teardown_order").run())
