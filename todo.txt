@@ -1,3 +1,4 @@
+print the trace of errors
 catch errors in setup
 what to do in teardown when setup was'n finished? users responsibility?
 add an option to __repr__ the suite verbosely
@@ -8,3 +9,5 @@ refactor error. it should not be initialized only after crash?
 testResult.Status should not return a string.
 give a more globla flag to control coloring.
 show nested exception? how?
+assert_throws
+make suite fro all methods in class
