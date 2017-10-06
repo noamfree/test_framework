@@ -1,6 +1,6 @@
 from test_status import Failure, Success
 
-TEXT_COLOR = '\033[0m'
+
 
 
 class TestResult:
@@ -14,7 +14,7 @@ class TestResult:
         error_message = ("\n" + self.show_problem()) if self.error else ""
 
         if color:
-            status_message = self._status.color() + status_message + TEXT_COLOR
+            status_message = self._status.color_text(status_message)
         return status_message + error_message
 
     def status_message(self):

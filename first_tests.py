@@ -106,7 +106,7 @@ basic_test_suite = TestSuite("test_testing",
                              TestingTestCase("test_report_what_is_the_problem"),
                              TestingTestCase("test_report_success_with_color"),
                              TestingTestCase("test_report_fail_with_color"),
-                             TestingTestCase("test_print_trace_of_problem"),
+                             # TestingTestCase("test_print_trace_of_problem"),
                              )
 
 suite_test_suite = TestSuite("suite_testing",
